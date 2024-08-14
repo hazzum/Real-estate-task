@@ -1,0 +1,17 @@
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
+
+RUN apk add --no-cache bash curl
+
+WORKDIR /usr/src/app
+
+RUN corepack enable \
+    && corepack prepare pnpm@latest --activate
+COPY package*.json ./
+
+RUN pnpm install
+COPY . .
+
+EXPOSE 5173
+
+CMD ["pnpm", "run", "dev"]
